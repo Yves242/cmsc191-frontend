@@ -19,6 +19,9 @@ import { Logo } from '@/components/core/logo';
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
 
+import {maroonColor, lightBlackColor, yellowColor, forestGreenColor, white} from "./colors";
+import { UploadSimple } from '@phosphor-icons/react';
+
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
 
@@ -35,7 +38,7 @@ export function SideNav(): React.JSX.Element {
         '--NavItem-icon-color': 'var(--mui-palette-neutral-400)',
         '--NavItem-icon-active-color': 'var(--mui-palette-primary-contrastText)',
         '--NavItem-icon-disabled-color': 'var(--mui-palette-neutral-600)',
-        bgcolor: 'var(--SideNav-background)',
+        bgcolor: maroonColor,
         color: 'var(--SideNav-color)',
         display: { xs: 'none', lg: 'flex' },
         flexDirection: 'column',
@@ -52,9 +55,9 @@ export function SideNav(): React.JSX.Element {
     >
       <Stack spacing={2} sx={{ p: 3 }}>
         <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
-          <Logo color="light" height={32} width={122} />
+          <Logo color="light" height={50} width={104} />
         </Box>
-        <Box
+        {/* <Box
           sx={{
             alignItems: 'center',
             backgroundColor: 'var(--mui-palette-neutral-950)',
@@ -74,43 +77,47 @@ export function SideNav(): React.JSX.Element {
             </Typography>
           </Box>
           <CaretUpDownIcon />
-        </Box>
+        </Box> */}
       </Stack>
-      <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
+      <Divider sx={{ borderColor: white }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
         {renderNavItems({ pathname, items: navItems })}
       </Box>
-      <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
-      <Stack spacing={2} sx={{ p: '12px' }}>
-        <div>
-          <Typography color="var(--mui-palette-neutral-100)" variant="subtitle2">
-            Need more features?
-          </Typography>
-          <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-            Check out our Pro solution template.
-          </Typography>
-        </div>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box
-            component="img"
-            alt="Pro version"
-            src="/assets/devias-kit-pro.png"
-            sx={{ height: 'auto', width: '160px' }}
-          />
-        </Box>
-        <Button
-          component="a"
-          endIcon={<ArrowSquareUpRightIcon fontSize="var(--icon-fontSize-md)" />}
-          fullWidth
+
+          
+      <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
+        <Box
+          component={RouterLink} 
           href="https://material-kit-pro-react.devias.io/"
-          sx={{ mt: 2 }}
-          target="_blank"
-          variant="contained"
+          sx={{
+            alignItems: 'center',
+            borderRadius: 1,
+            cursor: 'pointer',
+            display: 'flex',
+            flex: '0 0 auto',
+            gap: 1,
+            p: '6px 16px',
+            position: 'relative',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            bgcolor: yellowColor, 
+            color: forestGreenColor 
+          }}
         >
-          Pro version
-        </Button>
-      </Stack>
-    </Box>
+            <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
+              <UploadSimple fontSize="var(--icon-fontSize-md)" />
+            </Box>
+            <Box sx={{ flex: '1 1 auto' }}>
+              <Typography
+                component="span"
+                sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500, lineHeight: '28px' }}
+              >
+                Upload SP/Thesis
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
   );
 }
 
@@ -152,7 +159,7 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
         sx={{
           alignItems: 'center',
           borderRadius: 1,
-          color: 'var(--NavItem-color)',
+          color: white,
           cursor: 'pointer',
           display: 'flex',
           flex: '0 0 auto',
@@ -163,16 +170,16 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
           whiteSpace: 'nowrap',
           ...(disabled && {
             bgcolor: 'var(--NavItem-disabled-background)',
-            color: 'var(--NavItem-disabled-color)',
+            color: white,
             cursor: 'not-allowed',
           }),
-          ...(active && { bgcolor: 'var(--NavItem-active-background)', color: 'var(--NavItem-active-color)' }),
+          ...(active && { bgcolor: yellowColor, color: forestGreenColor }),
         }}
       >
         <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
           {Icon ? (
             <Icon
-              fill={active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
+              fill={active ? forestGreenColor : white}
               fontSize="var(--icon-fontSize-md)"
               weight={active ? 'fill' : undefined}
             />
@@ -187,6 +194,8 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
           </Typography>
         </Box>
       </Box>
+
     </li>
   );
 }
+
