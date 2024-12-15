@@ -26,7 +26,7 @@ This is for the statistics area. It should be able to show the three required st
 This is for the upload file option.
 ![image](https://github.com/user-attachments/assets/abe07942-c1f5-4ff6-8109-c75cd0a91e3b)
 
-Finally, t his is how it should look when a PDF file is uploaded. Users can manually type the text.
+Finally, this is how it should look when a PDF file is uploaded. Users can manually type the text.
 ![image](https://github.com/user-attachments/assets/d65f93a2-358f-4443-bc73-bca1e37206f5)
 
 
