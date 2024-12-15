@@ -6,6 +6,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { MainNav } from '@/components/dashboard/layout/main-nav';
 import { SideNav } from '@/components/dashboard/layout/side-nav';
+import OriginalGrid from '@mui/material/Grid';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -35,14 +36,29 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
           minHeight: '100%',
         }}
       >
+        
         <SideNav />
-        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-          <MainNav />
-          <main>
-            <Container maxWidth="xl" sx={{ py: '64px' }}>
-              {children}
-            </Container>
-          </main>
+        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' }, 
+          backgroundImage:`url('uplb_library.jpg')`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          height: '80vh',
+        }}>
+
+
+          <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column',
+            backgroundImage:`url('uplb_library.jpg')`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            height: '100%',
+          }}>
+            {/* <MainNav /> */}
+            <main>
+              <Container maxWidth="xl" sx={{ py: '27px' }}>
+                {children}
+              </Container>
+            </main>
+          </Box>
         </Box>
       </Box>
     </AuthGuard>
