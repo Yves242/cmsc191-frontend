@@ -1,22 +1,9 @@
 "use client";
 
 import * as React from 'react';
-import type { Metadata } from 'next';
 import Grid from '@mui/material/Unstable_Grid2';
 import OriginalGrid from '@mui/material/Grid';
-import dayjs from 'dayjs';
-
-import { Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
-
-import { config } from '@/config';
-import { Budget } from '@/components/dashboard/overview/budget';
-import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
-import { LatestProducts } from '@/components/dashboard/overview/latest-products';
-import { Sales } from '@/components/dashboard/overview/sales';
-import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
-import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
-import { TotalProfit } from '@/components/dashboard/overview/total-profit';
-import { Traffic } from '@/components/dashboard/overview/traffic';
+import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import { Box, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 
@@ -67,7 +54,7 @@ export default function Page(): React.JSX.Element {
                 sx={{
                   width: '98%', padding: 0, margin: 0,
                   '& .MuiOutlinedInput-root': { 
-                    backgroundColor: 'lightblue', 
+                    backgroundColor: 'white', 
                     borderRadius: 0, 
                     '& fieldset': {
                       border: 'none', // Remove the outline
@@ -114,7 +101,7 @@ export default function Page(): React.JSX.Element {
                   }}>
 
                   {/* Label */}
-                  <Typography>Filter:&nbsp;&nbsp;&nbsp; </Typography> 
+                  <Typography sx={{ fontWeight: 'bold' }}>Filter:&nbsp;&nbsp;&nbsp; </Typography> 
 
                   {/* Combo box */}
                   <FormControl fullWidth>
@@ -123,7 +110,6 @@ export default function Page(): React.JSX.Element {
                         background: "rgba(255,255,255,1)",
                         width: '147px', padding: 0, margin: 0, height: '43px',
                         '& .MuiOutlinedInput-root': { 
-                          backgroundColor: 'lightblue', 
                           borderRadius: 0, 
                           '& fieldset': {
                             border: 'none', // Remove the outline
@@ -163,7 +149,7 @@ export default function Page(): React.JSX.Element {
                 }}>
 
                   {/* Label */}
-                  <Typography>Classification:&nbsp;&nbsp;&nbsp; </Typography> 
+                  <Typography sx={{ fontWeight: 'bold' }}>Classification:&nbsp;&nbsp;&nbsp; </Typography> 
 
                   {/* Combo box */}
                   <FormControl fullWidth>
@@ -171,8 +157,7 @@ export default function Page(): React.JSX.Element {
                       sx={{
                         width: '138px', padding: 0, margin: 0, height: '43px',
                         background: "rgba(255,255,255,1)",
-                        '& .MuiOutlinedInput-root': { 
-                          backgroundColor: 'lightblue !important', 
+                        '& .MuiOutlinedInput-root': {  
                           borderRadius: 0, 
                           '& fieldset': {
                             border: 'none', // Remove the outline
