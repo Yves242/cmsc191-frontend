@@ -9,6 +9,10 @@ export const navItems1 = [
   // { key: 'error', title: 'Error', href: paths.errors.notFound, icon: 'x-square' },
 ] satisfies NavItemConfig[];
 
+export const sideBarItems = [
+  { key: 'overview', title: 'Sample Title', href: paths.dashboard.overview, icon: 'search' },
+] satisfies NavItemConfig[];
+
 export const navItems2 = [
   { key: 'overview', title: 'Search Page', href: paths.dashboard.overview, icon: 'search' },
   // { key: 'integrations', title: 'Integrations', href: paths.dashboard.integrations, icon: 'plugs-connected' },
