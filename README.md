@@ -7,7 +7,6 @@
 4. Thesis/SP Uploab Page
 5. Display Area
 
-### See below image for your reference.
 ![image](https://github.com/user-attachments/assets/604be52a-22aa-4e67-9fe8-8dda2970eaee)
 
 # Functionalities to be Implemented
