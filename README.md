@@ -11,22 +11,22 @@
 
 # Functionalities to be Implemented
 
-## First page upon viewing the site:
+First page upon viewing the site:
 ![image](https://github.com/user-attachments/assets/15c9d8f7-65ea-49c0-8d08-5ebc7aee5ace)
 
-## Upon writing texts sa search bar:
+Upon writing texts sa search bar:
 ![image](https://github.com/user-attachments/assets/cc070220-afac-43bc-97cf-42ca1128f64f)
 
-## Upon clicking a particular book, this will happen. Note: Na-aadd ito using book title sa left pane:
+Upon clicking a particular book, this will happen. Note: Na-aadd ito using book title sa left pane:
 ![image](https://github.com/user-attachments/assets/28051e78-419d-442a-9072-ff9be60e1db8)
 
-## This is for the statistics area. It should be able to show the three required statistics in just one page na scrollable para mas madali;
+This is for the statistics area. It should be able to show the three required statistics in just one page na scrollable para mas madali;
 ![image](https://github.com/user-attachments/assets/79330693-1129-4a31-a95c-fbbd89952a15)
 
-## This is for the upload file option.
+This is for the upload file option.
 ![image](https://github.com/user-attachments/assets/abe07942-c1f5-4ff6-8109-c75cd0a91e3b)
 
-## Finally, t his is how it should look when a PDF file is uploaded. Users can manually type the text.
+Finally, t his is how it should look when a PDF file is uploaded. Users can manually type the text.
 ![image](https://github.com/user-attachments/assets/d65f93a2-358f-4443-bc73-bca1e37206f5)
 
 
