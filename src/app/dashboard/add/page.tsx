@@ -16,11 +16,40 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Dayjs } from 'dayjs';
 
 const AddForm = () => {
     const [selectedYear, setSelectedYear] = useState<Dayjs | null>(null);
     const [classification, setClassification] = useState('');
+    const [formData, setFormData] = useState({
+        title: '',
+        author: '',
+        adviser: '',
+        abstract: '',
+        keyword: '',
+    });
+
+    const router = useRouter();
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert('SP/Thesis Submitted');
+        console.log({
+            ...formData,
+            year: selectedYear ? selectedYear.format('YYYY') : null,
+            classification,
+        });
+        router.push('/dashboard');
+    };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -36,10 +65,10 @@ const AddForm = () => {
             >
                 <Card sx={{ width: '100%', maxWidth: '1500px', boxShadow: 3, opacity: 0.95 }}>
                     <CardContent>
-                    <Typography variant="h4" sx={{ mb: 3, textAlign: 'center' }}>
-                        Add SP/Thesis
-                    </Typography>
-                        <form>
+                        <Typography variant="h4" sx={{ mb: 3, textAlign: 'center' }}>
+                            Add SP/Thesis
+                        </Typography>
+                        <form onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     {/* Title Field */}
@@ -49,6 +78,8 @@ const AddForm = () => {
                                         name="title"
                                         variant="outlined"
                                         required
+                                        value={formData.title}
+                                        onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -60,6 +91,8 @@ const AddForm = () => {
                                         type="text"
                                         variant="outlined"
                                         required
+                                        value={formData.author}
+                                        onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -71,6 +104,8 @@ const AddForm = () => {
                                         type="text"
                                         variant="outlined"
                                         required
+                                        value={formData.adviser}
+                                        onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -83,6 +118,8 @@ const AddForm = () => {
                                         rows={10}
                                         variant="outlined"
                                         required
+                                        value={formData.abstract}
+                                        onChange={handleInputChange}
                                     />
                                 </Grid>
                                 <Grid container item xs={12} spacing={3}>
@@ -111,6 +148,8 @@ const AddForm = () => {
                                             type="text"
                                             variant="outlined"
                                             required
+                                            value={formData.keyword}
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                     {/* Classification Dropdown */}
