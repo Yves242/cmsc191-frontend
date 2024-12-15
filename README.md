@@ -1,28 +1,28 @@
-Yves Notes:
+## Yves Notes:
 
-First page upon viewing the site:
+### First page upon viewing the site:
 ![image](https://github.com/user-attachments/assets/15c9d8f7-65ea-49c0-8d08-5ebc7aee5ace)
 
-Upon writing texts sa search bar:
+### Upon writing texts sa search bar:
 ![image](https://github.com/user-attachments/assets/cc070220-afac-43bc-97cf-42ca1128f64f)
 
-Upon clicking a particular book, this will happen. Note: Na-aadd ito using book title sa left pane:
+### Upon clicking a particular book, this will happen. Note: Na-aadd ito using book title sa left pane:
 ![image](https://github.com/user-attachments/assets/28051e78-419d-442a-9072-ff9be60e1db8)
 
 
-Lastly, this is for the statistics area. It should be able to show the three required statistics in just one page na scrollable para mas madali;
+### Lastly, this is for the statistics area. It should be able to show the three required statistics in just one page na scrollable para mas madali;
 ![image](https://github.com/user-attachments/assets/79330693-1129-4a31-a95c-fbbd89952a15)
 
 
-
+.
 ... 
 
 Next documentation is formal documentation from template.
 
 ...
-
-
-
+.
+.
+.
 
 
 
