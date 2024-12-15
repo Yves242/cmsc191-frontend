@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from 'react';
 import type { Metadata } from 'next';
 import Grid from '@mui/material/Unstable_Grid2';
+import OriginalGrid from '@mui/material/Grid';
 import dayjs from 'dayjs';
 
 import { config } from '@/config';
@@ -12,12 +15,81 @@ import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
 import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
-
-export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
+import { Box, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 
 export default function Page(): React.JSX.Element {
+
+  const [searchString, setSearchString] = useState(''); // State to store text
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchString(event.target.value); // Update state when input changes
+  };
+
+  const handleSubmit = () => {
+    console.log('Stored Text:', searchString); // Use the stored value (e.g., send to API or display)
+    alert(`You entered: ${searchString}`);
+  };
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={0}>
+      <Grid lg={12} sm={24} xs={48} spacing={1}>
+        <OriginalGrid container xs={12} spacing={0}>          
+          
+          <OriginalGrid item xs={7}>
+
+            {/* This grid container contains search box */}
+            <OriginalGrid container spacing={0}>
+
+              {/* "Search" button */}
+              <OriginalGrid item xs={1} spacing={0}>
+                <Box onClick={handleSubmit} sx={{ 
+                  backgroundColor: '#8e1537', height: '55px', width: '55px', display: 'flex', justifyContent: 'center', alignItems: 'center'
+                }}>
+                  <img src="search_button.png" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)'}}/>
+                </Box>
+              </OriginalGrid>
+
+              {/* "Search" Text Area */}
+              <OriginalGrid item xs={11} spacing={0}>
+              <TextField variant="outlined" fullWidth placeholder="Search by using a keyword, author, or title"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: 'lightblue', // Background color of the input field
+                    borderRadius: 0, // Remove border radius (sharp corners)
+                    '& fieldset': {
+                      border: 'none', // Remove the outline
+                    },
+                    '&:hover fieldset': {
+                      border: 'none', // Remove the hover outline
+                    },
+                    '&.Mui-focused fieldset': {
+                      border: 'none', // Remove the focused outline
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      color: "black",
+                      opacity: 0.5, // Set the opacity to 50% for the placeholder
+                      fontSize: '20px',
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: '12px 14px', // Adjust padding to fit the placeholder correctly
+                      fontSize: '20px', // Change text size of the input text (adjust as needed)
+                    },
+                  },
+
+                  padding: 0, // Remove padding outside the TextField component
+                  margin: 0, // Remove any margin outside the TextField component
+                }}
+                  value={searchString} 
+                  onChange={handleChange} 
+                />
+              </OriginalGrid>
+
+
+            </OriginalGrid>
+          </OriginalGrid>
+        </OriginalGrid>
+      </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <Budget diff={12} trend="up" sx={{ height: '100%' }} value="$24k" />
       </Grid>
