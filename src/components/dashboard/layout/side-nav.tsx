@@ -83,7 +83,6 @@ export function SideNav(): React.JSX.Element {
         {renderNavItems({ pathname, items: navItems2 })}
       </Box>
 
-          
       <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
         <Box
           component={RouterLink} 
