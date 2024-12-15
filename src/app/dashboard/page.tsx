@@ -17,9 +17,8 @@ export default function Page(): React.JSX.Element {
     setSearchString(event.target.value); // Update state when input changes
   };
 
-  const handleSubmit = () => {
-    console.log('Stored Text:', searchString); // Use the stored value (e.g., send to API or display)
-    alert(`You entered: ${searchString}`);
+  const handleSearch = () => {
+    alert(`Search string: '${searchString}'`);
   };
 
   const handleOption1Change = (event: SelectChangeEvent<string>) => {
@@ -35,14 +34,14 @@ export default function Page(): React.JSX.Element {
       <Grid lg={12} sm={24} xs={48} spacing={1}>
         <OriginalGrid container xs={12} spacing={0}>
           
-          {/* This grid container contains search box */}
+          {/* This grid container contains SEARCH AREA */}
           <OriginalGrid item xs={7}>
             <OriginalGrid container spacing={0}>
 
               {/* "Search" button */}
-              <OriginalGrid item xs={1.3} spacing={0}>
-                <Box onClick={handleSubmit} sx={{ 
-                  backgroundColor: '#8e1537', height: '55px', width: '55px', display: 'flex', justifyContent: 'center', alignItems: 'center'
+              <OriginalGrid item xs={0.99} spacing={0}>
+                <Box onClick={handleSearch} sx={{ 
+                  backgroundColor: '#8e1537', height: '54px', width: '54px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'
                 }}>
                   <img src="search_button.png" style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)'}}/>
                 </Box>
@@ -52,7 +51,7 @@ export default function Page(): React.JSX.Element {
               <OriginalGrid item xs={10.7} spacing={0}>
               <TextField variant="outlined" placeholder="Search by using a keyword, author, or title"
                 sx={{
-                  width: '98%', padding: 0, margin: 0,
+                  width: '99%', padding: 0, margin: 0,
                   '& .MuiOutlinedInput-root': { 
                     backgroundColor: 'white', 
                     borderRadius: 0, 
@@ -78,6 +77,11 @@ export default function Page(): React.JSX.Element {
                 }}
                   value={searchString} 
                   onChange={handleChange} 
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch(); // Call your search function here
+                    }
+                  }}
                 />
               </OriginalGrid>
             </OriginalGrid> 
@@ -88,10 +92,10 @@ export default function Page(): React.JSX.Element {
             <OriginalGrid container spacing={0}>
 
 
-            {/* spacer */}
-            <OriginalGrid item xs={0.35} spacing={0}>
-                <Typography> &nbsp; </Typography>
-            </OriginalGrid>
+              {/* spacer */}
+              <OriginalGrid item xs={0.35} spacing={0}>
+                  <Typography> &nbsp; </Typography>
+              </OriginalGrid>
 
 
               {/* FILTER PART */}
@@ -136,10 +140,10 @@ export default function Page(): React.JSX.Element {
               </OriginalGrid>
 
 
-            {/* spacer */}
-            <OriginalGrid item xs={1.45} spacing={0}>
-                <Typography> &nbsp; </Typography>
-            </OriginalGrid>
+              {/* spacer */}
+              <OriginalGrid item xs={1.45} spacing={0}>
+                  <Typography> &nbsp; </Typography>
+              </OriginalGrid>
 
 
               {/* CLASSIFICATION PART */}
