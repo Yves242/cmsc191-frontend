@@ -1,118 +1,28 @@
-## Yves Notes:
+# Yves Notes:
 
-### First page upon viewing the site:
-![image](https://github.com/user-attachments/assets/15c9d8f7-65ea-49c0-8d08-5ebc7aee5ace)
+## There are 5 parts to this page:
+1. Analytics Tab
+2. Search Page
+3. Book Page (added per SP/Thesis click)
+4. Thesis/SP Uploab Page
+5. Display Area
 
-### Upon writing texts sa search bar:
-![image](https://github.com/user-attachments/assets/cc070220-afac-43bc-97cf-42ca1128f64f)
+![image](https://github.com/user-attachments/assets/604be52a-22aa-4e67-9fe8-8dda2970eaee)
 
-### Upon clicking a particular book, this will happen. Note: Na-aadd ito using book title sa left pane:
-![image](https://github.com/user-attachments/assets/28051e78-419d-442a-9072-ff9be60e1db8)
+See the below documentation for more information on the proposed functionalities and flow of our project.
 
-
-### Lastly, this is for the statistics area. It should be able to show the three required statistics in just one page na scrollable para mas madali;
-![image](https://github.com/user-attachments/assets/79330693-1129-4a31-a95c-fbbd89952a15)
-
-
-.
-... 
-
-Next documentation is formal documentation from template.
-
-...
-.
-.
-.
+[https://docs.google.com/document/d/1J2gDVNB8y0F6w1RyXrox_4H3dFnxz5Rb2GyV0IqYdFI/edit?usp=sharing](https://docs.google.com/document/d/1J2gDVNB8y0F6w1RyXrox_4H3dFnxz5Rb2GyV0IqYdFI/edit?usp=sharing)
 
 
-
-## [Devias Kit - React](https://material-kit-react.devias.io/)
-
-![license](https://img.shields.io/badge/license-MIT-blue.svg)
-
-[![Devias Kit - React](https://github.com/devias-io/material-kit-react/blob/main/public/assets/thumbnail.png)](https://material-kit-react.devias.io/)
-
-> Free React Admin Dashboard made with [MUI's](https://mui.com) components, [React](https://reactjs.org) and of course [Next.js](https://github.com/vercel/next.js) to boost your app development process!
-
-## Pages 
-
-- [Dashboard](https://material-kit-react.devias.io)
-- [Customers](https://material-kit-react.devias.io/dashboard/customers)
-- [Integrations](https://material-kit-react.devias.io/dashboard/integrations)
-- [Settings](https://material-kit-react.devias.io/dashboard/settings)
-- [Account](https://material-kit-react.devias.io/dashboard/account)
-- [Sign In](https://material-kit-react.devias.io/auth/sign-in)
-- [Sign Up](https://material-kit-react.devias.io/auth/sign-up)
-- [Reset Password](https://material-kit-react.devias.io/auth/reset-password)
-
-## Free Figma Community File
-
-- [Duplicate File](https://www.figma.com/file/b3L1Np4RYiicZAOMopHNkm/Devias-Dashboard-Design-Library-Kit)
-
-## Upgrade to PRO Version
-
-We also have a pro version of this product which bundles even more pages and components if you want
-to save more time and design efforts :)
-
-| Free Version (this one)  | [Devias Kit Pro](https://mui.com/store/items/devias-kit-pro/)                |
-| ------------------------ | :--------------------------------------------------------------------------- |
-| **8** Pages              | **80+** Pages                                                                |
-| ✔ Custom Authentication  | ✔ Authentication with **Amplify**, **Auth0**, **Firebase** and **Supabase**  |
-| -                        | ✔ Vite Version                                                               |
-| -                        | ✔ Dark Mode Support                                                          |
-| -                        | ✔ Complete Users Flows                                                       |
-| -                        | ✔ Premium Technical Support                                                  |
 
 ## Quick start
 
-- Clone the repo: `git clone https://github.com/devias-io/material-kit-react.git`
+- Clone the repo: `git clone https://github.com/Yves242/cmsc191-frontend`
 - Make sure your Node.js and npm versions are up to date
 - Install dependencies: `npm install` or `yarn`
 - Start the server: `npm run dev` or `yarn dev`
 - Open browser: `http://localhost:3000`
 
-## File Structure
-
-Within the download you'll find the following directories and files:
-
-```
-┌── .editorconfig
-├── .eslintrc.js
-├── .gitignore
-├── CHANGELOG.md
-├── LICENSE.md
-├── next-env.d.ts
-├── next.config.js
-├── package.json
-├── README.md
-├── tsconfig.json
-├── public
-└── src
-	├── components
-	├── contexts
-	├── hooks
-	├── lib
-	├── styles
-	├── types
-	└── app
-		├── layout.tsx
-		├── page.tsx
-		├── auth
-		└── dashboard
-```
-
-## Resources
-
-- More freebies like this one: https://devias.io
-
-## Reporting Issues:
-
-- [Github Issues Page](https://github.com/devias-io/material-kit-react/issues)
-
 ## License
 
 - Licensed under [MIT](https://github.com/devias-io/material-kit-react/blob/main/LICENSE.md)
-
-## Contact Us
-
-- Email Us: support@deviasio.zendesk.com
