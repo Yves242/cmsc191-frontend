@@ -4,12 +4,9 @@ import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareUpRight';
-import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
@@ -20,7 +17,7 @@ import { navItems } from './config';
 import { navIcons } from './nav-icons';
 
 import {maroonColor, lightBlackColor, yellowColor, forestGreenColor, white} from "./colors";
-import { UploadSimple } from '@phosphor-icons/react';
+import { PlusCircle, UploadSimple } from '@phosphor-icons/react';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
@@ -88,7 +85,7 @@ export function SideNav(): React.JSX.Element {
       <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
         <Box
           component={RouterLink} 
-          href="https://material-kit-pro-react.devias.io/"
+          href={paths.dashboard.upload}
           sx={{
             alignItems: 'center',
             borderRadius: 1,
@@ -105,14 +102,14 @@ export function SideNav(): React.JSX.Element {
           }}
         >
             <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-              <UploadSimple fontSize="var(--icon-fontSize-md)" />
+              <PlusCircle fontSize="var(--icon-fontSize-md)" />
             </Box>
             <Box sx={{ flex: '1 1 auto' }}>
               <Typography
                 component="span"
                 sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500, lineHeight: '28px' }}
               >
-                Upload SP/Thesis
+                Add SP/Thesis
               </Typography>
             </Box>
           </Box>
