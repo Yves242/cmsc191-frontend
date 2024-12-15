@@ -9,7 +9,7 @@
 
 ![image](https://github.com/user-attachments/assets/604be52a-22aa-4e67-9fe8-8dda2970eaee)
 
-## Classmates, please see this [documentation](https://docs.google.com/document/d/1J2gDVNB8y0F6w1RyXrox_4H3dFnxz5Rb2GyV0IqYdFI/edit?usp=sharing) for more information on the functionalities and proposed flow of these pages.
+Classmates, please see [this documentation](https://docs.google.com/document/d/1J2gDVNB8y0F6w1RyXrox_4H3dFnxz5Rb2GyV0IqYdFI/edit?usp=sharing) for more information on the functionalities and proposed flow of these pages.
 
 ## Quick start
 
