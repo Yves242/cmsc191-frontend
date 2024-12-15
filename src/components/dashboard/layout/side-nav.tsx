@@ -4,24 +4,18 @@ import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareUpRight';
-import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
-
-import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
-
-import { navItems1 } from './config';
-import { navItems2 } from './config';
+import { navItems1, navItems2 } from './config';
 import { navIcons } from './nav-icons';
-
 import {maroonColor, lightBlackColor, yellowColor, forestGreenColor, white} from "./colors";
 import { UploadSimple } from '@phosphor-icons/react';
+
+import type { NavItemConfig } from '@/types/nav';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
@@ -89,7 +83,6 @@ export function SideNav(): React.JSX.Element {
         {renderNavItems({ pathname, items: navItems2 })}
       </Box>
 
-          
       <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
         <Box
           component={RouterLink} 
