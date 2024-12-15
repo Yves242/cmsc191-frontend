@@ -85,7 +85,7 @@ export function SideNav(): React.JSX.Element {
       <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
         <Box
           component={RouterLink} 
-          href={paths.dashboard.upload}
+          href={paths.dashboard.add}
           sx={{
             alignItems: 'center',
             borderRadius: 1,
