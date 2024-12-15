@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
           backgroundImage:`url('uplb_library.jpg')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          height: '80vh',
+          height: '80vh', 
         }}>
 
 
@@ -50,7 +50,8 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
             backgroundImage:`url('uplb_library.jpg')`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            height: '100%',
+            position: 'fixed',
+            height: '100%', 
           }}>
             {/* <MainNav /> */}
             <main>

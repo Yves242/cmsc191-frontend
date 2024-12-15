@@ -3,17 +3,12 @@
 import * as React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import OriginalGrid from '@mui/material/Grid';
-import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
+import { Select, MenuItem, FormControl, SelectChangeEvent, Button } from '@mui/material';
 import { Box, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
 
 export default function Page(): React.JSX.Element {
-
-  const [searchString, setSearchString] = useState(''); // State to store text
-  const [selectedFilterOption1, setSelectedFilterOption1] = useState<string>('oldest');
-  const [selectedFilterOption2, setSelectedFilterOption2] = useState<string>('both');
-  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
 
   // Sample data with 13 believable rows of SP/Thesis research publications
   const rows = [
@@ -33,8 +28,30 @@ export default function Page(): React.JSX.Element {
     { title: 'Cybersecurity Challenges in IoT Devices: A Research Survey', author: 'Ethan White', keywords: 'Cybersecurity, IoT, Devices', date: '2022-10-18', adviser: 'Prof. Jessica Moore' },
   ];
 
+  const [searchString, setSearchString] = useState(''); // State to store text
+  const [selectedFilterOption1, setSelectedFilterOption1] = useState<string>('oldest');
+  const [selectedFilterOption2, setSelectedFilterOption2] = useState<string>('both');
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 6; // Set rows per page to 6
+
+  // Calculate the range of items being displayed
+  const startItem = (currentPage * itemsPerPage) + 1;
+  const endItem = Math.min((currentPage+1) * itemsPerPage, rows.length);
+
+  // Calculate the rows to display based on the current page
+  const rowsToDisplay = rows.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
   // State to track which row is clicked
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
+
+  const handlePageChange = (direction: string) => {
+    if (direction === 'next' && (currentPage) * itemsPerPage < rows.length) {
+      setCurrentPage(currentPage + 1);
+    } else if (direction === 'prev' && currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   // Function to handle row click
   const handleRowClick = (index: number) => {
@@ -44,19 +61,12 @@ export default function Page(): React.JSX.Element {
     setSelectedRow(index); // Set the clicked row as selected
   };
 
-  // Limit the rows displayed to a maximum of 6
-  const rowsToDisplay = rows.slice(0, 6);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchString(event.target.value); // Update state when input changes
   };
 
   const handleSearch = () => {
     alert(`Search string: '${searchString}'`);
-  };
-
-  const handleItemClick = () => {
-    alert(`You clicked on item.'`);
   };
 
   const handleOption1Change = (event: SelectChangeEvent<string>) => {
@@ -234,43 +244,84 @@ export default function Page(): React.JSX.Element {
             justifyContent: 'flex-start', // Align items at the start of the container
             height: '100%', paddingTop: 3
         }}>
-          <TableContainer component={Paper} sx={{ padding: '20px', paddingTop: '9px' }}>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Title</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Author</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Keywords</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Date of Publication</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Adviser</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rowsToDisplay.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    onClick={() => handleRowClick(index)} // Handle row click
-                    sx={{
-                      cursor: 'pointer', // Pointer cursor on hover
-                      backgroundColor: selectedRow === index ? '#e0e0e0' : 'transparent', // Highlight selected row
-                      '&:hover': {
-                        backgroundColor: '#f0f0f0', // Highlight on hover
-                      },
-                    }}
-                  >
-                    <TableCell>{row.title}</TableCell>
-                    <TableCell>{row.author}</TableCell>
-                    <TableCell>{row.keywords}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{row.adviser}</TableCell>
+
+          <div>
+            <TableContainer component={Paper} sx={{ padding: '14px', paddingTop: '9px' }}>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Title</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Author</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Keywords</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Date of Publication</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Adviser</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {rowsToDisplay.map((row, index) => (
+                    <TableRow
+                      key={index}
+                      onClick={() => handleRowClick(index)}
+                      sx={{
+                        cursor: 'pointer', // Pointer cursor on hover
+                        backgroundColor: 'transparent', paddingBottom: 11,
+                        '&:hover': {
+                          backgroundColor: '#f0f0f0', // Highlight on hover
+                        },
+                      }}
+                    >
+                      <TableCell>{row.title}</TableCell>
+                      <TableCell>{row.author}</TableCell>
+                      <TableCell>{row.keywords}</TableCell>
+                      <TableCell>{row.date}</TableCell>
+                      <TableCell>{row.adviser}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+      
+
+            {/* Pagination Controls */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '10px', paddingBottom: '0px'}}>
+
+
+              {/* Previous Page Button */}
+              <Button          
+                onClick={() => handlePageChange('prev')}
+                disabled={startItem == 1}
+                sx={{ 
+                  marginRight: '10px', width: '40px', height: '40px', backgroundColor: 'white', 
+                  color: 'black', borderRadius: '6px', boxShadow: 'none', 
+                  '&:hover': { backgroundColor: '#f0f0f0',  }
+                }}
+              >
+                {'<'}
+              </Button>
+              <Box width={400} sx={{justifyContent: 'center', alignContent: 'center'}}>
+                <Typography variant="body1" sx={{ color: 'white', fontWeight: '420'}}>
+                  Showing <b>{startItem}</b> - <b>{endItem}</b> of <b>{rows.length}</b> items
+                </Typography>
+              </Box>
+
+              {/* spacer */}
+              <Box sx={{display: 'flex', height: '100%', width: '100%'}}/>
+
+
+              {/* Next Page Button */}
+              <Button 
+                onClick={() => handlePageChange('next')}
+                disabled={(currentPage+1) * itemsPerPage >= rows.length}
+                sx={{ width: '40px', height: '40px', backgroundColor: 'white', color: 'black',
+                  borderRadius: '6px', boxShadow: 'none', 
+                  '&:hover': { backgroundColor: '#f0f0f0'},
+                }}
+              >
+                {'>'}
+              </Button>
+            </Box>
+          </div>
         </Box>
-
-
       </Grid>      
     </Grid>
   );
