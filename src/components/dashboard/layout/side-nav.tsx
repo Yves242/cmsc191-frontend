@@ -16,7 +16,8 @@ import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
 
-import { navItems } from './config';
+import { navItems1 } from './config';
+import { navItems2 } from './config';
 import { navIcons } from './nav-icons';
 
 import {maroonColor, lightBlackColor, yellowColor, forestGreenColor, white} from "./colors";
@@ -79,9 +80,13 @@ export function SideNav(): React.JSX.Element {
           <CaretUpDownIcon />
         </Box> */}
       </Stack>
-      <Divider sx={{ borderColor: white }} />
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.5)' }} />
+      <Box component="nav" sx={{  p: '12px' }}>
+        {renderNavItems({ pathname, items: navItems1 })}
+      </Box>
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.5)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-        {renderNavItems({ pathname, items: navItems })}
+        {renderNavItems({ pathname, items: navItems2 })}
       </Box>
 
           
@@ -182,6 +187,9 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
               fill={active ? forestGreenColor : white}
               fontSize="var(--icon-fontSize-md)"
               weight={active ? 'fill' : undefined}
+              style={{
+                transform: icon == 'search' ? 'scaleX(-1)' : 'scaleX(1)'
+              }}
             />
           ) : null}
         </Box>
