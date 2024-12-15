@@ -133,7 +133,6 @@ export default function Page(): React.JSX.Element {
                       <MenuItem value="oldest">Oldest First</MenuItem>
                       <MenuItem value="newest">Newest First</MenuItem>
                       <MenuItem value="last5Years">Last 5 Years</MenuItem>
-                      <MenuItem value="dateRange">Date Range</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>
