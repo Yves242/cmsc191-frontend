@@ -13,17 +13,6 @@ Classmates, please see this [documentation](https://docs.google.com/document/d/1
 
 The next information are some template documentation from the template.
 
-## Pages 
-
-- [Dashboard](https://material-kit-react.devias.io)
-- [Customers](https://material-kit-react.devias.io/dashboard/customers)
-- [Integrations](https://material-kit-react.devias.io/dashboard/integrations)
-- [Settings](https://material-kit-react.devias.io/dashboard/settings)
-- [Account](https://material-kit-react.devias.io/dashboard/account)
-- [Sign In](https://material-kit-react.devias.io/auth/sign-in)
-- [Sign Up](https://material-kit-react.devias.io/auth/sign-up)
-- [Reset Password](https://material-kit-react.devias.io/auth/reset-password)
-
 ## Quick start
 
 - Clone the repo: `git clone https://github.com/Yves242/cmsc191-frontend`
@@ -31,7 +20,6 @@ The next information are some template documentation from the template.
 - Install dependencies: `npm install` or `yarn`
 - Start the server: `npm run dev` or `yarn dev`
 - Open browser: `http://localhost:3000`
-
 
 ## License
 
