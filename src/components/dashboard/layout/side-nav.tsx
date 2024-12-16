@@ -7,13 +7,16 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
+import type { NavItemConfig } from '@/types/nav';
+
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
 import { navItems1, navItems2, sideBarItems } from './config';
 import { navIcons } from './nav-icons';
 import {maroonColor, lightBlackColor, yellowColor, forestGreenColor, white} from "./colors";
-import { UploadSimple } from '@phosphor-icons/react';
+import { PlusCircle, UploadSimple } from '@phosphor-icons/react';
 
 import type { NavItemConfig } from '@/types/nav';
 import { Icon } from '@mui/material';
@@ -118,7 +121,7 @@ export function SideNav(): React.JSX.Element {
       <Box component="nav" sx={{ flex: '1 1 1', p: '12px'}} >
         <Box
           component={RouterLink} 
-          href="https://material-kit-pro-react.devias.io/"
+          href={paths.dashboard.add}
           sx={{
             alignItems: 'center',
             borderRadius: 1,
@@ -135,14 +138,14 @@ export function SideNav(): React.JSX.Element {
           }}
         >
             <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
-              <UploadSimple fontSize="var(--icon-fontSize-md)" />
+              <PlusCircle fontSize="var(--icon-fontSize-md)" />
             </Box>
             <Box sx={{ flex: '1 1 auto' }}>
               <Typography
                 component="span"
                 sx={{ color: 'inherit', fontSize: '0.875rem', fontWeight: 500, lineHeight: '28px' }}
               >
-                Upload SP/Thesis
+                Add SP/Thesis
               </Typography>
             </Box>
           </Box>
