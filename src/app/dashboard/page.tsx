@@ -12,7 +12,7 @@ import axios from 'axios';
 export default function Page(): React.JSX.Element {
   // State for search and results
   const [searchString, setSearchString] = useState('');
-  const [selectedFilterOption1, setSelectedFilterOption1] = useState<string>('oldest');
+  const [selectedFilterOption1, setSelectedFilterOption1] = useState<string>('relevance');
   const [selectedFilterOption2, setSelectedFilterOption2] = useState<string>('both');
   const [currentPage, setCurrentPage] = useState(0);
   const [error, setError] = useState<string>('');
@@ -23,9 +23,21 @@ export default function Page(): React.JSX.Element {
   const apiKey = process.env.NEXT_PUBLIC_ELASTIC_API_KEY;
   const elasticUrl = "https://293cc130e8a4402a9917c77722058e3e.us-central1.gcp.cloud.es.io:443";
 
-  // Function to get sort order based on filter option
+  // // Function to get sort order based on filter option
+  // const getSortOrder = () => {
+  //   return selectedFilterOption1 === 'newest' ? 'desc' : 'asc';
+  // };
+
+  //relevance first
   const getSortOrder = () => {
-    return selectedFilterOption1 === 'newest' ? 'desc' : 'asc';
+    switch (selectedFilterOption1) {
+      case 'newest':
+        return { year: { order: 'desc' } };
+      case 'oldest':
+        return { year: { order: 'asc' } };
+      default:
+        return null;  // for 'relevance' and 'last5Years'
+    }
   };
 
   // Function to get classification filter
@@ -51,23 +63,44 @@ export default function Page(): React.JSX.Element {
     try {
       const query: any = {
         bool: {
-          must: [{ match_all: {} }]
+          must: [{ match_all: {} }],
+          filter: [] // Add filter array
         }
       };
-
+  
       // Add classification filter if specified
       const classificationFilter = getClassificationFilter();
       if (classificationFilter) {
         query.bool.must.push(classificationFilter);
       }
-
+  
+      // Add date range filter for last 5 years if selected
+      if (selectedFilterOption1 === 'last5Years') {
+        const fiveYearsAgo = new Date(); // Get current date
+        fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
+        query.bool.filter.push({
+          range: { // Add range filter for year
+            year: {
+              gte: fiveYearsAgo.getFullYear().toString() // Get year from date
+            }
+          }
+        });
+      }
+  
+      const searchBody: any = {
+        size: 50,
+        query: query
+      };
+  
+      // Only add sort if it's not relevance
+      const sortOrder = getSortOrder();
+      if (sortOrder) {
+        searchBody.sort = [sortOrder];
+      }
+  
       const response = await axios.post(
         `${elasticUrl}/orbit/_search`,
-        {
-          size: 50,
-          sort: [{ timestamp: { order: getSortOrder() } }],
-          query: query
-        },
+        searchBody,
         {
           headers: {
             "Content-Type": "application/json",
@@ -75,7 +108,7 @@ export default function Page(): React.JSX.Element {
           },
         }
       );
-
+  
       setResults(response.data.hits.hits);
       setError('');
     } catch (err: any) {
@@ -92,7 +125,6 @@ export default function Page(): React.JSX.Element {
   const currentItems = results.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
 // Function to handle search
-// Function to handle search
 const handleSearch = async () => {
   setError('');
   try {
@@ -108,7 +140,9 @@ const handleSearch = async () => {
 
     const query: any = {
       bool: {
-        should: []
+        should: [],
+        filter: [], // Add filter array
+        minimum_should_match: searchString ? 1 : 0 // At least one should match if there's a search string
       }
     };
 
@@ -116,35 +150,67 @@ const handleSearch = async () => {
     if (searchString) {
       query.bool.should.push({
         semantic: {
-          field: "semantic_abstract", // Use the correct field name for semantic search
-          query: searchString, // Query from input
+          field: "semantic_abstract",
+          query: searchString,
         }
       });
 
       query.bool.should.push(
-        { match: { title: searchString } },
+        { 
+          match: { 
+            title: {
+              query: searchString,
+              boost: 2 // Give title matches higher relevance
+            } 
+          } 
+        },
         { match: { author: searchString } },
         { match: { keywords: searchString } },
         { match: { adviser_text: searchString } },
         { match: { year: searchString } }
       );
     } else {
-      query.bool.should.push({ match_all: {} }); // If no search term, return all documents
+      query.bool.should.push({ match_all: {} });
     }
 
     // Add classification filter if specified
     const classificationFilter = getClassificationFilter();
     if (classificationFilter) {
-      query.bool.must.push(classificationFilter);
+      query.bool.filter.push(classificationFilter);
+    }
+
+    // Add date range filter for last 5 years if selected
+    if (selectedFilterOption1 === 'last5Years') {
+      const currentYear = new Date().getFullYear();
+      const fiveYearsAgo = currentYear - 5;
+      query.bool.filter.push({
+        range: {
+          year: {
+            gte: fiveYearsAgo.toString(),
+            lte: currentYear.toString()
+          }
+        }
+      });
+    }
+
+    const searchBody: any = {
+      size: 50,
+      query: query
+    };
+
+    // Only add sort if it's not relevance-based
+    const sortOrder = getSortOrder();
+    if (sortOrder) {
+      searchBody.sort = [
+        sortOrder,
+        "_score" // Include score as secondary sort
+      ];
     }
 
     // Perform search
     const response = await axios.post(
       `${elasticUrl}/orbit/_search`,
-      {
-        size: 50, // Limit to 50 results, adjust as needed
-        query: query
-      },
+      searchBody,
       {
         headers: {
           "Content-Type": "application/json",
@@ -153,8 +219,10 @@ const handleSearch = async () => {
       }
     );
 
+    // Update results and reset to first page
     setResults(response.data.hits.hits);
-    setCurrentPage(0); // Reset to first page
+    setCurrentPage(0);
+
   } catch (err: any) {
     console.error(err);
     if (err.response?.status === 404) {
@@ -292,8 +360,9 @@ const handleSearch = async () => {
                           },
                         },
                     }}>
-                      <MenuItem value="oldest">Oldest First</MenuItem>
+                      <MenuItem value="relevance">Relevance</MenuItem>
                       <MenuItem value="newest">Newest First</MenuItem>
+                      <MenuItem value="oldest">Oldest First</MenuItem>
                       <MenuItem value="last5Years">Last 5 Years</MenuItem>
                     </Select>
                   </FormControl>
