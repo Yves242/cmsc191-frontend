@@ -109,6 +109,24 @@ const customers = [
   },
 ] satisfies Customer[];
 
+const iframes = [
+  {
+    title: "Dashboard 1",
+    description: "This dashboard provides insights into the professors and their top 5 research interests.",
+    src: "https://855dac5f2fa740c5953a30843e86b2d4.us-central1.gcp.cloud.es.io/app/dashboards?auth_provider_hint=anonymous1#/view/b2887699-e738-40e3-a6eb-070865f6a477?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-100y%2Cto%3Anow))",
+  },
+  {
+    title: "Dashboard 2",
+    description: "This dashboard is a pie chart on the number of SPs versus the number of Thesis Publication on the Database",
+    src: "https://855dac5f2fa740c5953a30843e86b2d4.us-central1.gcp.cloud.es.io/app/dashboards?auth_provider_hint=anonymous1#/view/d0fea885-7152-4a3c-b409-8a3fc4fd04a8?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-100y%2Cto%3Anow))",
+  },
+  {
+    title: "Dashboard 3",
+    description: "This dashboard allows students to navigate the trending industries over the past year.",
+    src: "https://855dac5f2fa740c5953a30843e86b2d4.us-central1.gcp.cloud.es.io/app/dashboards?auth_provider_hint=anonymous1#/view/f5df1ced-d801-48d9-b1c2-0c6970f755df?embed=true&_g=(refreshInterval%3A(pause%3A!t%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-100y%2Cto%3Anow))",
+  },
+];
+
 export default function Page(): React.JSX.Element {
   const page = 0;
   const rowsPerPage = 5;
@@ -119,29 +137,55 @@ export default function Page(): React.JSX.Element {
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Customers</Typography>
+          <Typography variant="h4">Insights on Publications</Typography>
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            <Button color="inherit" startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}>
-              Import
-            </Button>
-            <Button color="inherit" startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}>
-              Export
-            </Button>
+            
           </Stack>
         </Stack>
-        <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
-            Add
-          </Button>
-        </div>
+        
       </Stack>
-      <CustomersFilters />
-      <CustomersTable
-        count={paginatedCustomers.length}
-        page={page}
-        rows={paginatedCustomers}
-        rowsPerPage={rowsPerPage}
-      />
+      
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        {/* Left Side: First iframe with its header and subheading */}
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <Typography variant="h5" style={{ marginBottom: "10px" }}>
+            {iframes[0].title}
+          </Typography>
+          <Typography variant="body1" style={{ marginBottom: "20px" }}>
+            {iframes[0].description}
+          </Typography>
+          <iframe
+            src={iframes[0].src}
+            height="400"
+            width="100%"
+            style={{ border: "none" }}
+            title={iframes[0].title}
+          ></iframe>
+        </div>
+
+        {/* Right Side: Other two iframes */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {iframes.slice(1).map((iframe, index) => (
+            <div key={index}>
+              <Typography variant="h5" style={{ marginBottom: "10px" }}>
+            {iframes[index].title}
+          </Typography>
+          <Typography variant="body1" style={{ marginBottom: "20px" }}>
+            {iframes[index].description}
+          </Typography>
+              <iframe
+                src={iframe.src}
+                height="400"
+                width="100%"
+                style={{ border: "none" }}
+                title={iframe.title}
+              ></iframe>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
     </Stack>
   );
 }
