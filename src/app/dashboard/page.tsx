@@ -5,68 +5,178 @@ import Grid from '@mui/material/Unstable_Grid2';
 import OriginalGrid from '@mui/material/Grid';
 import { Select, MenuItem, FormControl, SelectChangeEvent, Button } from '@mui/material';
 import { Box, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
+import axios from 'axios';
 
 export default function Page(): React.JSX.Element {
-
-  // Sample data with 13 believable rows of SP/Thesis research publications
-  const rows = [
-    { title: 'The Impact of Artificial Intelligence in Healthcare', author: 'John Doe', keywords: 'AI, Healthcare, Automation', date: '2023-11-15', adviser: 'Dr. Alice Johnson' },
-    { title: 'Sustainable Urban Planning: A Case Study on Green Architecture', author: 'Jane Smith', keywords: 'Sustainability, Urban Planning, Architecture', date: '2023-10-25', adviser: 'Prof. Mark Lee' },
-    { title: 'Blockchain Technology in Financial Systems', author: 'David Kim', keywords: 'Blockchain, Finance, Cryptocurrencies', date: '2023-09-12', adviser: 'Dr. Claire Thompson' },
-    { title: 'Analyzing Climate Change Impact on Coastal Communities', author: 'Mary Tan', keywords: 'Climate Change, Coastal Communities, Environmental Science', date: '2023-08-05', adviser: 'Dr. George Williams' },
-    { title: 'Social Media Influence on Modern Politics', author: 'Emily Li', keywords: 'Social Media, Politics, Influence', date: '2023-07-21', adviser: 'Prof. Samantha Clark' },
-    { title: 'Advancements in Renewable Energy: Wind Power Technologies', author: 'Chris Nguyen', keywords: 'Renewable Energy, Wind Power, Technology', date: '2023-06-30', adviser: 'Dr. Kevin Brown' },
-    { title: 'Big Data in Healthcare: Privacy and Ethical Concerns', author: 'Rachel Gomez', keywords: 'Big Data, Healthcare, Ethics', date: '2023-05-18', adviser: 'Dr. Sarah Green' },
-    { title: 'Artificial Intelligence in Education: Personalized Learning Systems', author: 'Samuel Lee', keywords: 'AI, Education, Personalized Learning', date: '2023-04-10', adviser: 'Prof. Linda Carter' },
-    { title: 'The Role of Quantum Computing in Modern Cryptography', author: 'Andrew Harris', keywords: 'Quantum Computing, Cryptography, Security', date: '2023-03-22', adviser: 'Dr. James Robinson' },
-    { title: 'Exploring the Effects of Automation on the Labor Market', author: 'Olivia Clark', keywords: 'Automation, Labor Market, Economy', date: '2023-02-11', adviser: 'Dr. David Adams' },
-    { title: 'Genetic Engineering in Agriculture: A Sustainable Approach', author: 'Sophia Anderson', keywords: 'Genetic Engineering, Agriculture, Sustainability', date: '2023-01-29', adviser: 'Prof. Richard Scott' },
-    { title: 'The Influence of Artificial Intelligence on Modern Art', author: 'Lucas Baker', keywords: 'AI, Art, Creativity', date: '2022-12-15', adviser: 'Prof. Patricia Miller' },
-    { title: 'The Economic Impact of Electric Vehicles on Urban Transportation', author: 'Emma Wilson', keywords: 'Electric Vehicles, Economics, Urban Transportation', date: '2022-11-02', adviser: 'Dr. Robert Harris' },
-    { title: 'Cybersecurity Challenges in IoT Devices: A Research Survey', author: 'Ethan White', keywords: 'Cybersecurity, IoT, Devices', date: '2022-10-18', adviser: 'Prof. Jessica Moore' },
-  ];
-
-  const [searchString, setSearchString] = useState(''); // State to store text
+  // State for search and results
+  const [searchString, setSearchString] = useState('');
   const [selectedFilterOption1, setSelectedFilterOption1] = useState<string>('oldest');
   const [selectedFilterOption2, setSelectedFilterOption2] = useState<string>('both');
-  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 6; // Set rows per page to 6
+  const [error, setError] = useState<string>('');
+  const [results, setResults] = useState<any[]>([]);
+  const itemsPerPage = 6;
 
-  // Calculate the range of items being displayed
+  // Elasticsearch configuration
+  const apiKey = process.env.NEXT_PUBLIC_ELASTIC_API_KEY;
+  const elasticUrl = "https://293cc130e8a4402a9917c77722058e3e.us-central1.gcp.cloud.es.io:443";
+
+  // Function to get sort order based on filter option
+  const getSortOrder = () => {
+    return selectedFilterOption1 === 'newest' ? 'desc' : 'asc';
+  };
+
+  // Function to get classification filter
+  const getClassificationFilter = () => {
+    // Only add classification filter if sp or thesis is specifically selected
+    if (selectedFilterOption2 === 'sp' || selectedFilterOption2 === 'thesis') {
+      return {
+        match: {
+          classification: selectedFilterOption2
+        }
+      };
+    }
+    return null; // Return null for 'both' to show all results
+  };
+
+  // Fetch initial results on component mount or when filters change
+  useEffect(() => {
+    fetchLatestPublications();
+  }, [selectedFilterOption1, selectedFilterOption2]);
+
+  // Function to fetch latest publications
+  const fetchLatestPublications = async () => {
+    try {
+      const query: any = {
+        bool: {
+          must: [{ match_all: {} }]
+        }
+      };
+
+      // Add classification filter if specified
+      const classificationFilter = getClassificationFilter();
+      if (classificationFilter) {
+        query.bool.must.push(classificationFilter);
+      }
+
+      const response = await axios.post(
+        `${elasticUrl}/orbit/_search`,
+        {
+          size: 50,
+          sort: [{ timestamp: { order: getSortOrder() } }],
+          query: query
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `ApiKey ${apiKey}`,
+          },
+        }
+      );
+
+      setResults(response.data.hits.hits);
+      setError('');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || err.message);
+    }
+  };
+
+  // Calculate pagination values
   const startItem = (currentPage * itemsPerPage) + 1;
-  const endItem = Math.min((currentPage+1) * itemsPerPage, rows.length);
+  const endItem = Math.min((currentPage + 1) * itemsPerPage, results.length);
 
-  // Calculate the rows to display based on the current page
-  const rowsToDisplay = rows.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+  // Get current page items
+  const currentItems = results.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
-  // State to track which row is clicked
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+// Function to handle search
+// Function to handle search
+const handleSearch = async () => {
+  setError('');
+  try {
+    // Check connection to Elasticsearch
+    await axios.get(
+      `${elasticUrl}/_cluster/health`,
+      {
+        headers: {
+          Authorization: `ApiKey ${apiKey}`,
+        },
+      }
+    );
+
+    const query: any = {
+      bool: {
+        should: []
+      }
+    };
+
+    // Add search query if there's a search term
+    if (searchString) {
+      query.bool.should.push({
+        semantic: {
+          field: "semantic_abstract", // Use the correct field name for semantic search
+          query: searchString, // Query from input
+        }
+      });
+
+      query.bool.should.push(
+        { match: { title: searchString } },
+        { match: { author: searchString } },
+        { match: { keywords: searchString } },
+        { match: { adviser_text: searchString } },
+        { match: { year: searchString } }
+      );
+    } else {
+      query.bool.should.push({ match_all: {} }); // If no search term, return all documents
+    }
+
+    // Add classification filter if specified
+    const classificationFilter = getClassificationFilter();
+    if (classificationFilter) {
+      query.bool.must.push(classificationFilter);
+    }
+
+    // Perform search
+    const response = await axios.post(
+      `${elasticUrl}/orbit/_search`,
+      {
+        size: 50, // Limit to 50 results, adjust as needed
+        query: query
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `ApiKey ${apiKey}`,
+        },
+      }
+    );
+
+    setResults(response.data.hits.hits);
+    setCurrentPage(0); // Reset to first page
+  } catch (err: any) {
+    console.error(err);
+    if (err.response?.status === 404) {
+      setError("Elasticsearch not found or the index is missing.");
+    } else if (err.response?.status === 401) {
+      setError("Authentication failed. Please check your API key.");
+    } else {
+      setError(err.response?.data?.message || err.message);
+    }
+  }
+};
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchString(event.target.value);
+  };
 
   const handlePageChange = (direction: string) => {
-    if (direction === 'next' && (currentPage) * itemsPerPage < rows.length) {
+    if (direction === 'next' && (currentPage + 1) * itemsPerPage < results.length) {
       setCurrentPage(currentPage + 1);
     } else if (direction === 'prev' && currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
-  };
-
-  // Function to handle row click
-  const handleRowClick = (index: number) => {
-
-    // Handle any logic you want on row click here
-    alert(`Row clicked: ${index}, ${JSON.stringify(rows[index])}`);
-    setSelectedRow(index); // Set the clicked row as selected
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchString(event.target.value); // Update state when input changes
-  };
-
-  const handleSearch = () => {
-    alert(`Search string: '${searchString}'`);
   };
 
   const handleOption1Change = (event: SelectChangeEvent<string>) => {
@@ -76,12 +186,16 @@ export default function Page(): React.JSX.Element {
   const handleOption2Change = (event: SelectChangeEvent<string>) => {
     setSelectedFilterOption2(event.target.value);
   };
+
+  // Function to handle row click
+  const handleRowClick = (index: number) => {
+    const item = currentItems[index];
+    alert(`Title: ${item._source.title}\nAuthors: ${item._source.authors}\nYear: ${item._source.year_range}`);
+  };
   
   return (
     <Grid container spacing={0}>
       <Grid lg={12} sm={24} xs={48} spacing={1}>
-
-
         {/* This container contains TOP FUNCTIONALITIES */}
         <OriginalGrid container xs={12} spacing={0}>
           
@@ -107,17 +221,17 @@ export default function Page(): React.JSX.Element {
                     backgroundColor: 'white', 
                     borderRadius: 0, 
                     '& fieldset': {
-                      border: 'none', // Remove the outline
+                      border: 'none',
                     },
                     '&:hover fieldset': {
-                      border: 'none', // Remove the hover outline
+                      border: 'none',
                     },
                     '&.Mui-focused fieldset': {
-                      border: 'none', // Remove the focused outline
+                      border: 'none',
                     },
                     '& .MuiInputBase-input::placeholder': {
                       color: "black",
-                      opacity: 0.5, // Set the opacity to 50% for the placeholder
+                      opacity: 0.5,
                       fontSize: '20px',
                     },
                     '& .MuiInputBase-input': {
@@ -130,7 +244,7 @@ export default function Page(): React.JSX.Element {
                   onChange={handleChange} 
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      handleSearch(); // Call your search function here
+                      handleSearch();
                     }
                   }}
                 />
@@ -141,13 +255,10 @@ export default function Page(): React.JSX.Element {
           {/* This grid container contains FILTER AND CLASSIFICATION */}
           <OriginalGrid item xs={5}>
             <OriginalGrid container spacing={0}>
-
-
               {/* spacer */}
               <OriginalGrid item xs={0.26} spacing={0}>
                   <Typography> &nbsp; </Typography>
               </OriginalGrid>
-
 
               {/* FILTER PART */}
               <OriginalGrid item xs={4} spacing={0}>
@@ -167,13 +278,13 @@ export default function Page(): React.JSX.Element {
                         '& .MuiOutlinedInput-root': { 
                           borderRadius: 0, 
                           '& fieldset': {
-                            border: 'none', // Remove the outline
+                            border: 'none',
                           },
                           '&:hover fieldset': {
-                            border: 'none', // Remove the hover outline
+                            border: 'none',
                           },
                           '&.Mui-focused fieldset': {
-                            border: 'none', // Remove the focused outline
+                            border: 'none',
                           },
                           '& .MuiInputBase-input': {
                             padding: '12px 14px', 
@@ -189,12 +300,10 @@ export default function Page(): React.JSX.Element {
                 </Box>
               </OriginalGrid>
 
-
               {/* spacer */}
               <OriginalGrid item xs={1.45} spacing={0}>
                   <Typography> &nbsp; </Typography>
               </OriginalGrid>
-
 
               {/* CLASSIFICATION PART */}
               <OriginalGrid item xs={4} spacing={0}>
@@ -214,13 +323,13 @@ export default function Page(): React.JSX.Element {
                         '& .MuiOutlinedInput-root': {  
                           borderRadius: 0, 
                           '& fieldset': {
-                            border: 'none', // Remove the outline
+                            border: 'none',
                           },
                           '&:hover fieldset': {
-                            border: 'none', // Remove the hover outline
+                            border: 'none',
                           },
                           '&.Mui-focused fieldset': {
-                            border: 'none', // Remove the focused outline
+                            border: 'none',
                           },
                           '& .MuiInputBase-input': {
                             padding: '12px 14px', 
@@ -240,10 +349,15 @@ export default function Page(): React.JSX.Element {
         </OriginalGrid>
 
         <Box sx={{
-            display: 'flex', flexDirection: 'column', // Stacks children vertically
-            justifyContent: 'flex-start', // Align items at the start of the container
+            display: 'flex', flexDirection: 'column',
+            justifyContent: 'flex-start',
             height: '100%', paddingTop: 2
         }}>
+          {error && (
+            <Typography color="error" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+          )}
 
           <div>
             <TableContainer component={Paper}>
@@ -258,40 +372,39 @@ export default function Page(): React.JSX.Element {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rowsToDisplay.map((row, index) => (
+                  {currentItems.map((item, index) => (
                     <TableRow
                       key={index}
                       onClick={() => handleRowClick(index)}
                       sx={{
-                        cursor: 'pointer', // Pointer cursor on hover
-                        backgroundColor: 'transparent', paddingBottom: 11,
+                        cursor: 'pointer',
+                        backgroundColor: 'transparent',
+                        paddingBottom: 11,
                         '&:hover': {
-                          backgroundColor: '#f0f0f0', // Highlight on hover
+                          backgroundColor: '#f0f0f0',
                         },
                       }}
                     >
-                      <TableCell>{row.title}</TableCell>
-                      <TableCell>{row.author}</TableCell>
-                      <TableCell>{row.keywords}</TableCell>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell>{row.adviser}</TableCell>
+                      <TableCell>{item._source.title}</TableCell>
+                      <TableCell>{item._source.author}</TableCell>
+                      <TableCell>{item._source.keyword || 'N/A'}</TableCell>
+                      <TableCell>{item._source.year}</TableCell>
+                      <TableCell>{item._source.adviser_keyword || 'N/A'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-      
 
             {/* Pagination Controls */}
             <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '10px', paddingBottom: '0px'}}>
-
-
               {/* Previous Page Button */}
               <Button          
                 onClick={() => handlePageChange('prev')}
-                disabled={startItem == 1}
+                disabled={currentPage === 0}
                 sx={{ 
-                  marginRight: '10px', width: '40px', height: '40px', backgroundColor: (startItem == 1) ? '#d1d1d1' : 'white', 
+                  marginRight: '10px', width: '40px', height: '40px', 
+                  backgroundColor: currentPage === 0 ? '#d1d1d1' : 'white', 
                   color: 'black', borderRadius: '6px', boxShadow: 'none', 
                   '&:hover': { backgroundColor: '#8e1537', color: "white"},
                 }}
@@ -300,19 +413,20 @@ export default function Page(): React.JSX.Element {
               </Button>
               <Box width={400} sx={{justifyContent: 'center', alignContent: 'center'}}>
                 <Typography variant="body1" sx={{ color: 'white', fontWeight: '420'}}>
-                  Showing <b>{startItem}</b> - <b>{endItem}</b> of <b>{rows.length}</b> items
+                  Showing <b>{results.length > 0 ? startItem : 0}</b> - <b>{results.length > 0 ? endItem : 0}</b> of <b>{results.length}</b> items
                 </Typography>
               </Box>
 
               {/* spacer */}
               <Box sx={{display: 'flex', height: '100%', width: '100%'}}/>
 
-
               {/* Next Page Button */}
               <Button 
                 onClick={() => handlePageChange('next')}
-                disabled={(currentPage+1) * itemsPerPage >= rows.length}
-                sx={{ width: '40px', height: '40px', backgroundColor: ((currentPage+1) * itemsPerPage >= rows.length) ? '#d1d1d1' : 'white', 
+                disabled={(currentPage + 1) * itemsPerPage >= results.length}
+                sx={{ 
+                  width: '40px', height: '40px', 
+                  backgroundColor: (currentPage + 1) * itemsPerPage >= results.length ? '#d1d1d1' : 'white', 
                   color: 'black', borderRadius: '6px', boxShadow: 'none', 
                   '&:hover': { backgroundColor: '#8e1537', color: "white"},
                 }}
