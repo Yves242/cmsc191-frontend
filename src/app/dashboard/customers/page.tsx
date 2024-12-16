@@ -139,15 +139,9 @@ export default function Page(): React.JSX.Element {
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
           <Typography variant="h4">Insights on Publications</Typography>
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            
-          </Stack>
-        </Stack>
-        
-      </Stack>
-      
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
         {/* Left Side: First iframe with its header and subheading */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <Typography variant="h5" style={{ marginBottom: "10px" }}>
             {iframes[0].title}
           </Typography>
@@ -156,7 +150,7 @@ export default function Page(): React.JSX.Element {
           </Typography>
           <iframe
             src={iframes[0].src}
-            height="400"
+            height="800"
             width="100%"
             style={{ border: "none" }}
             title={iframes[0].title}
@@ -164,18 +158,18 @@ export default function Page(): React.JSX.Element {
         </div>
 
         {/* Right Side: Other two iframes */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
           {iframes.slice(1).map((iframe, index) => (
             <div key={index}>
-              <Typography variant="h5" style={{ marginBottom: "10px" }}>
-            {iframes[index].title}
+              <Typography variant="h6" style={{ marginBottom: "10px" }}>
+            {iframes[index+1].title}
           </Typography>
           <Typography variant="body1" style={{ marginBottom: "20px" }}>
-            {iframes[index].description}
+            {iframes[index+1].description}
           </Typography>
               <iframe
                 src={iframe.src}
-                height="400"
+                height="300"
                 width="100%"
                 style={{ border: "none" }}
                 title={iframe.title}
@@ -184,6 +178,12 @@ export default function Page(): React.JSX.Element {
           ))}
         </div>
       </div>
+          </Stack>
+        </Stack>
+        
+      </Stack>
+      
+     
 
 
     </Stack>
