@@ -162,7 +162,7 @@ export default function Page(): React.JSX.Element {
                   <FormControl fullWidth>
                     <Select value={selectedFilterOption1} onChange={handleOption1Change}
                       sx={{
-                        background: "rgba(255,255,255,1)",
+                        backgroundColor: '#8e1537', color: "white",
                         width: '147px', padding: 0, margin: 0, height: '43px',
                         '& .MuiOutlinedInput-root': { 
                           borderRadius: 0, 
@@ -210,7 +210,7 @@ export default function Page(): React.JSX.Element {
                     <Select value={selectedFilterOption2} onChange={handleOption2Change}
                       sx={{
                         width: '138px', padding: 0, margin: 0, height: '43px',
-                        background: "rgba(255,255,255,1)",
+                        backgroundColor: '#8e1537', color: "white",
                         '& .MuiOutlinedInput-root': {  
                           borderRadius: 0, 
                           '& fieldset': {
@@ -242,14 +242,14 @@ export default function Page(): React.JSX.Element {
         <Box sx={{
             display: 'flex', flexDirection: 'column', // Stacks children vertically
             justifyContent: 'flex-start', // Align items at the start of the container
-            height: '100%', paddingTop: 3
+            height: '100%', paddingTop: 2
         }}>
 
           <div>
-            <TableContainer component={Paper} sx={{ padding: '14px', paddingTop: '9px' }}>
+            <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }}>
                 <TableHead>
-                  <TableRow>
+                  <TableRow sx={{ "& .MuiTableCell-head": { color: "white", backgroundColor: '#8e1537'}}}>
                     <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Title</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Author</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>Keywords</TableCell>
@@ -291,9 +291,9 @@ export default function Page(): React.JSX.Element {
                 onClick={() => handlePageChange('prev')}
                 disabled={startItem == 1}
                 sx={{ 
-                  marginRight: '10px', width: '40px', height: '40px', backgroundColor: 'white', 
+                  marginRight: '10px', width: '40px', height: '40px', backgroundColor: (startItem == 1) ? '#d1d1d1' : 'white', 
                   color: 'black', borderRadius: '6px', boxShadow: 'none', 
-                  '&:hover': { backgroundColor: '#f0f0f0',  }
+                  '&:hover': { backgroundColor: '#8e1537', color: "white"},
                 }}
               >
                 {'<'}
@@ -312,9 +312,9 @@ export default function Page(): React.JSX.Element {
               <Button 
                 onClick={() => handlePageChange('next')}
                 disabled={(currentPage+1) * itemsPerPage >= rows.length}
-                sx={{ width: '40px', height: '40px', backgroundColor: 'white', color: 'black',
-                  borderRadius: '6px', boxShadow: 'none', 
-                  '&:hover': { backgroundColor: '#f0f0f0'},
+                sx={{ width: '40px', height: '40px', backgroundColor: ((currentPage+1) * itemsPerPage >= rows.length) ? '#d1d1d1' : 'white', 
+                  color: 'black', borderRadius: '6px', boxShadow: 'none', 
+                  '&:hover': { backgroundColor: '#8e1537', color: "white"},
                 }}
               >
                 {'>'}

@@ -19,11 +19,19 @@ import type { NavItemConfig } from '@/types/nav';
 import { Icon } from '@mui/material';
 import { BookOpen } from '@phosphor-icons/react';
 
+interface ArticleProps {
+  title: string;
+  author: string;
+  keywords: string;
+  date: string; // You could use `Date` type if passing a Date object
+  adviser: string;
+}
+
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
   
   // Array of texts to display in the stack
-  const texts = ["Journal 1", "Journal 2", "Journal 3", "Journal 4"];
+  // const texts = ["Journal 1", "Journal 2", "Journal 3", "Journal 4"];
 
   return (
     <Box
@@ -67,20 +75,21 @@ export function SideNav(): React.JSX.Element {
 
 
       {/* ANALYTICS PAGE HERE */}
-      <Box component="nav" sx={{  p: '12px', bottomPadding: '0px' }}>
+      <Box component="nav" sx={{  p: '0px', bottomPadding: '0px', paddingTop: 1 }}>
         {renderNavItems({ pathname, items: navItems1 })}
       </Box>
 
       {/* simple divider */}
-      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.5)', topPadding: 0, bottomPadding: 1}} />
+      {/* <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.5)', topPadding: 0, bottomPadding: 1}} /> */}
 
 
       {/* SEARCH PAGE HERE */}
-      <Box component="nav" sx={{p: '12px'}}>
+      <Box component="nav" sx={{p: '0px'}}>
         {renderNavItems({ pathname, items: navItems2 })}
       </Box>
 
-      <Box component="nav" sx={{ flex: '1 1 auto', p: '12px', topPadding: '0px'}}>
+      {/* JOURNAL PARTS HERE */}
+      {/* <Box component="nav" sx={{ flex: '1 1 auto', p: '12px', topPadding: '0px'}}>
         {texts.map((text, index) => (
           <Box sx={{ alignItems: 'left', borderRadius: 1, color: white,
               display: 'flex', flex: '0 0 auto', gap: 1, p: '6px 16px', position: 'relative',
@@ -101,8 +110,8 @@ export function SideNav(): React.JSX.Element {
             </Box>
           </Box>
         ))}
-      </Box>
-
+      </Box> */}
+      <Box component="nav" sx={{ flex: '1 1 auto', p: '12px', topPadding: '0px'}}></Box>
 
 
 
