@@ -35,6 +35,8 @@ export default function Page(): React.JSX.Element {
         return { year: { order: 'desc' } };
       case 'oldest':
         return { year: { order: 'asc' } };
+      case 'recently_added':  // Add this case
+        return { timestamp: { order: 'desc' } };
       default:
         return null;  // for 'relevance' and 'last5Years'
     }
@@ -364,6 +366,7 @@ const handleSearch = async () => {
                       <MenuItem value="newest">Newest First</MenuItem>
                       <MenuItem value="oldest">Oldest First</MenuItem>
                       <MenuItem value="last5Years">Last 5 Years</MenuItem>
+                      <MenuItem value="recently_added">Recently Added</MenuItem> 
                     </Select>
                   </FormControl>
                 </Box>
