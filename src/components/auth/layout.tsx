@@ -43,8 +43,6 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           alignItems: 'center',
-          // background: 'radial-gradient(50% 50% at 50% 50%, #84183c 0%, #12553c 100%)',
-          // color: 'var(--mui-palette-common-white)',
           display: { xs: 'none', lg: 'flex' },
           justifyContent: 'center',
         }}
