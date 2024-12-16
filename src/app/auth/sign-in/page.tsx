@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { config } from '@/config';
 import { GuestGuard } from '@/components/auth/guest-guard';
 import { Layout } from '@/components/auth/layout';
-import { SignInForm } from '@/components/auth/sign-in-form';
+import { SignInForm } from '@/components/auth/sign-in-form.js';
 
 export const metadata = { title: `Sign in | Auth | ${config.site.name}` } satisfies Metadata;
 

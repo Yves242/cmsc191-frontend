@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,6 +18,8 @@ import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
 import { useUser } from '@/hooks/use-user';
+import { googleLogout } from '@react-oauth/google';
+import axios from 'axios';
 
 export interface UserPopoverProps {
   anchorEl: Element | null;
@@ -27,26 +31,51 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
   const { checkSession } = useUser();
 
   const router = useRouter();
+  const [ user, setUser ] = React.useState<any>([]);
+  const [ profile, setProfile ] = React.useState<any>([]);
 
-  const handleSignOut = React.useCallback(async (): Promise<void> => {
-    try {
-      const { error } = await authClient.signOut();
+  React.useEffect(
+    () => {
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+  );
 
-      if (error) {
-        logger.error('Sign out error', error);
-        return;
-      }
+  React.useEffect(
+      () => {
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                })
+                .catch((err) => console.log(err));
+        }
+      },
+      [ user ]
+  );
 
-      // Refresh the auth state
-      await checkSession?.();
-
-      // UserProvider, for this case, will not refresh the router and we need to do it manually
-      router.refresh();
-      // After refresh, AuthGuard will handle the redirect
-    } catch (err) {
-      logger.error('Sign out error', err);
-    }
-  }, [checkSession, router]);
+  const logOut = () => {
+    googleLogout();
+    router.replace(paths.auth.signIn);
+  };
 
   return (
     <Popover
@@ -56,27 +85,15 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
       open={open}
       slotProps={{ paper: { sx: { width: '240px' } } }}
     >
-      <Box sx={{ p: '16px 20px ' }}>
-        <Typography variant="subtitle1">Sofia Rivers</Typography>
+      {/* <Box sx={{ p: '16px 20px ' }}>
+        <Typography variant="subtitle1">{profile.name}</Typography>
         <Typography color="text.secondary" variant="body2">
-          sofia.rivers@devias.io
+          {profile.email}
         </Typography>
       </Box>
-      <Divider />
+      <Divider /> */}
       <MenuList disablePadding sx={{ p: '8px', '& .MuiMenuItem-root': { borderRadius: 1 } }}>
-        <MenuItem component={RouterLink} href={paths.dashboard.settings} onClick={onClose}>
-          <ListItemIcon>
-            <GearSixIcon fontSize="var(--icon-fontSize-md)" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem component={RouterLink} href={paths.dashboard.account} onClick={onClose}>
-          <ListItemIcon>
-            <UserIcon fontSize="var(--icon-fontSize-md)" />
-          </ListItemIcon>
-          Profile
-        </MenuItem>
-        <MenuItem onClick={handleSignOut}>
+        <MenuItem onClick={logOut}>
           <ListItemIcon>
             <SignOutIcon fontSize="var(--icon-fontSize-md)" />
           </ListItemIcon>
