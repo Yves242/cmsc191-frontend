@@ -22,6 +22,7 @@ import { Dayjs } from 'dayjs';
 const AddForm = () => {
     const [selectedYear, setSelectedYear] = useState<Dayjs | null>(null);
     const [classification, setClassification] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -40,15 +41,48 @@ const AddForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('SP/Thesis Submitted');
-        console.log({
-            ...formData,
-            year: selectedYear ? selectedYear.format('YYYY') : null,
-            classification,
-        });
-        router.push('/dashboard');
+        setIsSubmitting(true);
+
+        const currentTimestamp = new Date().toISOString();
+
+        const elasticSearchData = {
+            abstract: formData.abstract,
+            adviser_keyword: formData.adviser,
+            adviser_text: formData.adviser,
+            author: formData.author,
+            classification: classification.toLowerCase() === 'thesis' ? 'thesis' : 'sp',
+            keyword: formData.keyword,
+            timestamp: currentTimestamp,
+            title: formData.title,
+            year: selectedYear ? selectedYear.format('YYYY') : null
+        };
+
+        try {
+            const response = await fetch('https://293cc130e8a4402a9917c77722058e3e.us-central1.gcp.cloud.es.io:443/orbit/_doc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'ApiKey NjlCSXhKTUJ3MF9HR1E2eUxMTlc6QzRiWUltLVlUQU9NV1J6WHhpamtZUQ=='
+                },
+                body: JSON.stringify(elasticSearchData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            alert('SP/Thesis Successfully Added!');
+            console.log('Elasticsearch response:', data);
+            router.push('/dashboard');
+        } catch (error) {
+            console.error('Error submitting to Elasticsearch:', error);
+            alert('Error submitting SP/Thesis. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -59,8 +93,8 @@ const AddForm = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    px: 2, // padding for smaller screens
-                    minHeight: '90vh', // viewport height
+                    px: 2,
+                    minHeight: '90vh',
                 }}
             >
                 <Card sx={{ width: '100%', maxWidth: '1500px', boxShadow: 3, opacity: 0.95 }}>
@@ -71,7 +105,6 @@ const AddForm = () => {
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    {/* Title Field */}
                                     <TextField
                                         fullWidth
                                         label="Title"
@@ -83,7 +116,6 @@ const AddForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    {/* Author Field */}
                                     <TextField
                                         fullWidth
                                         label="Author/s"
@@ -96,7 +128,6 @@ const AddForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    {/* Adviser Field */}
                                     <TextField
                                         fullWidth
                                         label="Adviser"
@@ -109,7 +140,6 @@ const AddForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {/* Abstract Field */}
                                     <TextField
                                         fullWidth
                                         label="Abstract"
@@ -123,10 +153,9 @@ const AddForm = () => {
                                     />
                                 </Grid>
                                 <Grid container item xs={12} spacing={3}>
-                                    {/* Year Field */}
                                     <Grid item xs={12} sm={4}>
                                         <DatePicker
-                                            views={['year']} // only show year picker
+                                            views={['year']}
                                             label="Year"
                                             value={selectedYear}
                                             onChange={(newValue) => setSelectedYear(newValue)}
@@ -139,7 +168,6 @@ const AddForm = () => {
                                             }}
                                         />
                                     </Grid>
-                                    {/* Keyword Field */}
                                     <Grid item xs={12} sm={4}>
                                         <TextField
                                             fullWidth
@@ -152,7 +180,6 @@ const AddForm = () => {
                                             onChange={handleInputChange}
                                         />
                                     </Grid>
-                                    {/* Classification Dropdown */}
                                     <Grid item xs={12} sm={4}>
                                         <FormControl fullWidth required>
                                             <InputLabel id="classification-label">
@@ -177,20 +204,21 @@ const AddForm = () => {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
+                                        disabled={isSubmitting}
                                         sx={{
                                             px: 5,
                                             py: 1,
                                             textTransform: 'none',
                                         }}
                                     >
-                                        Submit
+                                        {isSubmitting ? 'Submitting...' : 'Submit'}
                                     </Button>
                                 </Grid>
                             </Grid>
                         </form>
                     </CardContent>
                 </Card>
-            </Box>
+                </Box>
         </LocalizationProvider>
     );
 };
