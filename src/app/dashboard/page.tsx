@@ -260,7 +260,7 @@ const handleSearch = async () => {
   // Function to handle row click
   const handleRowClick = (index: number) => {
     const item = currentItems[index];
-    alert(`Title: ${item._source.title}\nAuthors: ${item._source.authors}\nYear: ${item._source.year_range}`);
+    alert(`Title: ${item._source.title}\nAuthor: ${item._source.author}\nAdviser: ${item._source.adviser_text}\nYear: ${item._source.year}\nKeyword: ${item._source.keyword}\n\nAbstract:\n${item._source.abstract}`);
   };
   
   return (
